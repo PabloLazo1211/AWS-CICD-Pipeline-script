@@ -2,11 +2,16 @@ node {
 
     checkout scm
 
-    docker.withRegistry('https://registry.hub.docker.com', 'GITHUB2') {
+    docker.withRegistry('https://registry.hub.docker.com', 'dockerHub') {
 
         def customImage = docker.build("kt7ler89/dockerwebapp")
 
         /* Push the container to the custom Registry */
         customImage.push()
     }
+
+    stage("kubernetes deployment"){
+        sh 'kubectl apply -f deployment.yml'
+    }
+
 }
